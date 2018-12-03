@@ -1,0 +1,19 @@
+.income {
+    float: left;
+    width: 475px;
+    margin-right: 50px;
+
+    h2 {
+        text-transform: uppercase;
+        font-size: 18px;
+        font-weight: 400;
+        margin-bottom: 15px;
+    }
+
+    @include list-item;
+
+    .item__value,
+    .income .item__delete--btn {
+        color: $color-light-blue;
+    }
+}

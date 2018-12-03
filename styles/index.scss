@@ -1,5 +1,10 @@
 @import './abstracts/variables';
+@import './abstracts/mixins';
+
 @import './base/base';
-@import 'components/budget-display-top';
-@import 'components/top-part-container';
+@import './components/budget-display-top';
+@import './components/top-part-container';
+@import './components/lists-container';
 @import './components/add';
+@import './components/expenses-list';
+@import './components/income-list';

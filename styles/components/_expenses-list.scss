@@ -1,0 +1,23 @@
+.expenses {
+    float: left;
+    width: 475px;
+
+    h2 {
+        text-transform: uppercase;
+        font-size: 18px;
+        font-weight: 400;
+        margin-bottom: 15px;
+    }
+
+    &__title {
+        color: $color-red;
+    }
+
+    @include list-item;
+
+    .item__value,
+    .item__percentage,
+    .item__delete--btn {
+        color: $color-red;
+    }
+}
