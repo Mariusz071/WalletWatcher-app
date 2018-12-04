@@ -13,6 +13,7 @@ module.exports = function (env) {
             path: path.resolve(__dirname)
         },
         mode: isDev ? 'development' : 'production',
+        devtool: 'cheap-module-eval-source-map',
         module: {
             rules: [{
                     test: /\.jsx$/,
