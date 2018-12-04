@@ -9,8 +9,8 @@ module.exports = function (env) {
     const config = {
         entry: "./js/app.js",
         output: {
-            filename: "out.js",
-            path: path.resolve(__dirname, "build")
+            filename: "./js/out.js",
+            path: path.resolve(__dirname)
         },
         mode: isDev ? 'development' : 'production',
         module: {
