@@ -35,31 +35,39 @@ let uiController = (function() {
 })();
 
 let appController = (function (data, ui) {
-    let DOM = uiController.getDOMelements();
+
+    let initEventListeners = function() {
+        let DOM = uiController.getDOMelements();
+        let addBtn = document.querySelector(DOM.addButton);
+        addBtn.addEventListener('click', addItem);
+        document.addEventListener('keypress', function (e) {
+            if(e.keyCode === 13) {
+                addItem();
+            }
+        });
+    }
 
     let addItem = function() {
         //1. get input data
         let input = uiController.getInput();
         console.log(input);
 
-
         //2. add item to budget controller
         //3. Add new item to ui
         //4. Calculate the budget
         //5. Display the budget in UI
-        
-    }
+    };
 
-    let addBtn = document.querySelector(DOM.addButton);
-    addBtn.addEventListener('click', addItem);
-
-    document.addEventListener('keypress', function (e) {
-        if(e.keyCode === 13) {
-            addItem();
+    return {
+        init: function() {
+            console.log('App has started');
+            initEventListeners();
         }
-    })
-
+    };
 })(dataController, uiController);
+
+//init function for the App
+appController.init();
 
 
 
