@@ -49,8 +49,10 @@ let dataController = (function() {
             //push new created item to the datas tructure
             data.allValues[type].push(newItem);
 
-            // return newItem element
+            // return newItem element and clear input fields
+            uiController.clearInputs();
             return newItem;
+            
         },
         testData: function () {
             console.log(data);
@@ -114,7 +116,6 @@ let uiController = (function() {
                         </div>`
             }
             
-
             // replace placeholders with the data
             newHtml = html.replace('%id%', object.id);
             newHtml = newHtml.replace('%description%', object.description);
@@ -123,8 +124,20 @@ let uiController = (function() {
             // insert html into the DOM (as last child element of the list container)
             document.querySelector(listElement).insertAdjacentHTML('beforeend', newHtml);
         },
+
+        //clear input fields after adding list item
+        clearInputs: function() {
+            let inputFields = document.querySelectorAll('input');
+            inputFields = [...inputFields];
+            inputFields.forEach(el => {
+                el.value = '';
+            })
+
+            inputFields[0].focus();
+        }
     };
 })();
+
 
 let appController = (function (data, ui) {
 
