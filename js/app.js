@@ -77,7 +77,7 @@ let uiController = (function() {
             return {
                 type: document.querySelector(DOMelements.inputType).value,
                 description: document.querySelector(DOMelements.inputDescription).value,
-                value: document.querySelector(DOMelements.inputValue).value,
+                value: parseFloat(document.querySelector(DOMelements.inputValue).value)
             };
         },
         getDOMelements: function() {
@@ -152,21 +152,31 @@ let appController = (function (data, ui) {
         });
     }
 
+    let updateBudget = function () {
+        //1 calculate
+        //2 return
+        //3 display
+
+    }
+
     let addItem = function() {
         let input, newItem;
         //1. get input data
         input = uiController.getInput();
         data.testData();
 
-        //2. add item to budget controller
-        newItem = dataController.addItem(input.type, input.description, input.value);
-        console.log(newItem);
+        if(input.description !== '' && !isNaN(input.value) && input.value > 0) {
+            //2. add item to budget controller
+            newItem = dataController.addItem(input.type, input.description, input.value);
+            console.log(newItem);
 
-        //3. Add new item to ui
-        uiController.addListItem(newItem, input.type);
+            //3. Add new item to ui
+            uiController.addListItem(newItem, input.type);
+        } 
 
-        //4. Calculate the budget
-        //5. Display the budget in UI
+        //4. Calculate and update the budget
+
+        
     };
 
     return {
