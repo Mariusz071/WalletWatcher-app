@@ -266,8 +266,9 @@ let appController = (function (data, ui) {
 
             //2. delete item from uiser interface
             uiController.deleteListItem(itemID);
-            
+
             //3. update and show the new budget
+            updateBudget();
         }
     };
 
