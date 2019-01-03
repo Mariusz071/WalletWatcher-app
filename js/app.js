@@ -67,6 +67,19 @@ let dataController = (function() {
             console.log(data);
         },
 
+        deleteItem: function(type, id) {
+            let idsArray, index;
+            idsArray = data.allValues[type].map((el, i) => {
+                return el.id;
+            })
+
+            index = idsArray.indexOf(id);  
+
+            if (index !== -1) {
+                data.allValues[type].splice(index, 1);
+            }
+        },
+
         calculateBudget: function() {
             calculateTotals('expense');
             calculateTotals('income');
@@ -101,7 +114,8 @@ let uiController = (function() {
         budgetLabel: '.budget__value',
         incomeLabel: '.budget__income--value',
         expensesLabel: '.budget__expenses--value',
-        percentageLabel: '.budget__expenses--percentage'
+        percentageLabel: '.budget__expenses--percentage',
+        listsContainer: '.container'
     }
     
     //public methods / variables object
@@ -158,6 +172,11 @@ let uiController = (function() {
             document.querySelector(listElement).insertAdjacentHTML('beforeend', newHtml);
         },
 
+        deleteListItem: function (selectorID) {
+            let el = document.getElementById(selectorID);
+            el.parentElement.removeChild(el);
+        },
+
         //clear input fields after adding list item
         clearInputs: function() {
             let inputFields = document.querySelectorAll('input');
@@ -195,7 +214,10 @@ let appController = (function (data, ui) {
                 addItem();
             }
         });
-    }
+
+        document.querySelector(DOM.listsContainer).addEventListener('click', deleteItem);
+
+    };
 
     let updateBudget = function () {
         //1 calculate
@@ -229,9 +251,31 @@ let appController = (function (data, ui) {
 
     };
 
+    let deleteItem = function(e) {
+        let itemID, splitID, type, ID;
+        itemID = e.target.parentNode.parentNode.parentNode.parentNode.id
+
+        if (itemID) {
+            splitID = itemID.split('-');
+            type = splitID[0];
+            ID = parseInt(splitID[1]);
+
+            //1. delete item from data structure
+            dataController.deleteItem(type, ID);
+            dataController.testData();
+
+            //2. delete item from uiser interface
+            uiController.deleteListItem(itemID);
+            
+            //3. update and show the new budget
+        }
+    };
+
     return {
         init: function() {
             console.log('App has started');
+
+            //setting initial values for 0
             uiController.displayBudget({
                 budget: 0,
                 totalIncome: 0,
