@@ -6,8 +6,19 @@ let dataController = (function() {
         constructor(id, description, value) {
             this.id = id,
             this.description = description,
-            this.value = value
+            this.value = value,
+            this.percentage = -1;
         }
+        calcPercentage(totalIncome) {
+            if (totalIncome > 0) {
+                this.percentage = Math.round((this.value / totalIncome) * 100);
+            } else this.percentage = -1;
+        };
+
+        getPercentage() {
+            return this.percentage;
+        }
+
     }
 
     class Income {
@@ -91,6 +102,19 @@ let dataController = (function() {
             } else data.percentage = -1;
         },
 
+        calculatePercentage: function() {
+            data.allValues.expense.forEach(el => {
+                el.calcPercentage(data.totalValues.income);
+            });
+        },
+
+        getPercentage: function() {
+            let percentagesArray = data.allValues.expense.map(el => {
+                    return el.getPercentage();
+            });
+            return percentagesArray;
+        },
+
         getBudget: function () {
             return {
                 budget: data.budget,
@@ -103,6 +127,7 @@ let dataController = (function() {
 } )()
 
 let uiController = (function() {
+
     //class names in case we have to change them
     let DOMelements = {
         inputType: '.add__type',
@@ -115,7 +140,8 @@ let uiController = (function() {
         incomeLabel: '.budget__income--value',
         expensesLabel: '.budget__expenses--value',
         percentageLabel: '.budget__expenses--percentage',
-        listsContainer: '.container'
+        listsContainer: '.container',
+        percentage: '.item__percentage'
     }
     
     //public methods / variables object
@@ -133,6 +159,7 @@ let uiController = (function() {
 
         addListItem: function(object, type) {
             let html, newHtml, listElement;
+
             // create html string with placeholders
             if( type === 'income') {
                 listElement = DOMelements.incomeContainer;
@@ -198,6 +225,18 @@ let uiController = (function() {
             } else  {
                 document.querySelector(DOMelements.percentageLabel).textContent = '---'
             }
+        },
+
+        displayPercentage: function(percentages) {
+            let percentagesFields = document.querySelectorAll(DOMelements.percentage);
+            percentagesFields = [...percentagesFields];
+            console.log(percentagesFields);
+
+            percentagesFields.forEach((el, i) => {
+                if (percentages[i] > 0) {
+                    el.textContent = `${percentages[i]}%`;
+                } else el.textContent = '---';
+            })
         }
     };
 })();
@@ -228,7 +267,18 @@ let appController = (function (data, ui) {
 
         //3 display
         uiController.displayBudget(budget);
+    }
 
+    let updatePercentage = function() {
+        //1 calculate percentage
+        dataController.calculatePercentage();
+
+        //2 read percentages from budget controller
+        let percentages = dataController.getPercentage();
+
+        //3 update UI
+        console.log(percentages);
+        uiController.displayPercentage(percentages);
     }
 
     let addItem = function() {
@@ -249,6 +299,8 @@ let appController = (function (data, ui) {
         //4. Calculate and update the budget
         updateBudget();
 
+        //5. Calculate and update the percentages
+        updatePercentage();
     };
 
     let deleteItem = function(e) {
@@ -269,6 +321,9 @@ let appController = (function (data, ui) {
 
             //3. update and show the new budget
             updateBudget();
+
+            //4. calculate and update percentages
+            updatePercentage();
         }
     };
 
